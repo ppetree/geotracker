@@ -1,0 +1,16 @@
+<updates>
+	<update>
+		<name>GeoTracker - Shows The Latest Visitors On A Google Map</name>
+		<description>This is GeoTracker Version 1.8.5</description>
+		<element>mod_geotracker</element>
+		<type>module</type>
+		<version>1.8.5</version>
+		<downloads>
+			<downloadurl type="full" format="zip">http://github.com/ppetree/geotracker/pkg_geotracker_v1.8.5.zip</downloadurl>
+		</downloads>
+		<maintainer>ppetree</maintainer>
+		<maintainerurl>http://github.com/ppetree</maintainerurl>
+		<targetplatform name="joomla" version="4.0"/>
+		<client>site</client>
+	</update>
+</updates>
