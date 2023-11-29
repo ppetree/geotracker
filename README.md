@@ -5,7 +5,7 @@ This module shows the latest visitors to your website on a Google Map. To do thi
 
 To implement this you will need two modules:
 
-**Module One:** In this module 'Hide Map - Capture Data' should be selected and 'Title' should be set to NO and then assigned to any module position on all the pages where you want to capture the visitors location (home page, landing pages etc).<br><br>
+**Module One:** In this module 'Hide Map - Capture Data' should be selected and 'Title' should be set to NO and then assigned to any module position on all the pages where you want to capture the visitors location (home page, landing pages etc).
 
 **Module Two:** This second module will have 'Show Maps' enabled and this module will be assigned to the page where you want your map displayed. Something like 'geotracker-map'
 
