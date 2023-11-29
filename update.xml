@@ -6,10 +6,10 @@
 		<type>module</type>
 		<version>1.8.5</version>
 		<downloads>
-			<downloadurl type="full" format="zip">http://github.com/ppetree/geotracker/pkg_geotracker_v1.8.5.zip</downloadurl>
+			<downloadurl type="full" format="zip">https://github.com/ppetree/geotracker/releases/download/Update/pkg_mod_geotracker.v1.8.5.zip</downloadurl>
 		</downloads>
 		<maintainer>ppetree</maintainer>
-		<maintainerurl>http://github.com/ppetree</maintainerurl>
+		<maintainerurl>http://github.com/ppetree/geotracker</maintainerurl>
 		<targetplatform name="joomla" version="4.0"/>
 		<client>site</client>
 	</update>
