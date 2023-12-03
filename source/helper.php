@@ -32,7 +32,7 @@ class ModGeoTrackerHelper
 		}
 		else
 		{
-			// know service chosen so do nothing
+			// no service chosen so do nothing
 			return;
 		}
 
