@@ -1,7 +1,7 @@
 <updates>
 	<update>
 		<name>GeoTracker - Shows The Latest Visitors On A Google Map</name>
-		<description>This is GeoTracker Version 1.8.5</description>
+		<description>This is GeoTracker Version 1.8.85</description>
 		<element>mod_geotracker</element>
 		<type>module</type>
 		<version>1.8.5</version>
