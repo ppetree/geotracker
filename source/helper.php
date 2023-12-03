@@ -7,7 +7,8 @@
 
  * @link http://github.com/ppetree/geotracker.com
  * @copyright Copyright (C) 2023 Phil Petree
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL 
+ * @license https://github.com/ppetree/geotracker/blob/main/LICENSE GNU/GPL 
+ * @version 1.8.85
  * Shows your most recent visitors on a Google Map
  */
 
@@ -27,7 +28,7 @@ class ModGeoTrackerHelper
 		}
 		elseif($ipService == "IP2LOC")
 		{
-			$url = "https://api.ip2location.io/?key=$access_key&$ip";
+			$url = "https://api.ip2location.io/?key=$access_key&ip=$ip&format=json";
 		}
 		else
 		{
@@ -112,7 +113,7 @@ class ModGeoTrackerHelper
 		else
 		{
 			// echo "<p>lat/lon is already stored</p>";
-			if($showmap && $showtext) echo JText::_('GEOTR_YOURLOCATION');
+			if($showmap && $showtext) echo JText::_('GEOTR_YOURLOCATION') .$coordinates;
 		}
 	} 
 
