@@ -1,6 +1,7 @@
 Here are the current to-do's:
 
-1) some field descriptions are tied to joomla core labels that no longer exist and these need updating
-2) google maps javascript makes a deprecated call that needs to be rewritten. (tmpl/default.php)
-3) MAYBE add in some more free geoip services
-4) Determine how to get the update service working without using one of my servers.
+1) update sql code to use full joomla framework incase we get bad data back from the geo services
+2) some field descriptions are tied to joomla core labels that no longer exist and these need updating
+3) google maps javascript makes a deprecated call that needs to be rewritten. (tmpl/default.php)
+4) MAYBE add in some more free geoip services
+5) Determine how to get the update service working without using one of my servers.
