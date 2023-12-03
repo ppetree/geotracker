@@ -1,12 +1,13 @@
 <?php
 /**
 
- * GeoTracker Module 
-
+ * GeoTracker Module - Shows your sites visitors on a Google Map
+ *
  * @link http://github.com/ppetree/geotracker
  * @copyright Copyright (C) 2023 Phil Petree
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL 
- * Shows your visitors on a Google Map
+ * @license https://github.com/ppetree/geotracker/blob/main/LICENSE GNU/GPL 
+ * @version 1.8.85
+ *
  */
 
 // no direct access
