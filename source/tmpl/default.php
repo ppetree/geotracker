@@ -8,7 +8,8 @@
 
  * @link http://github.com/ppetree/geotracker.com
  * @copyright Copyright (C) 2023 Phil Petree
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL 
+ * @license https://github.com/ppetree/geotracker/blob/main/LICENSE GNU/GPL 
+ * @version 1.8.85
  * Shows your visitors on a Google Map
  */
 
