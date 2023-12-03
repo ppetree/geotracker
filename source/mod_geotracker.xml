@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension type="module" version="3.5" client="site" method="upgrade">
+<extension type="module" version="4.0" client="site" method="upgrade">
     <name>GeoTracker - Shows The Latest Visitors On A Google Map</name>
     <author>Phil Petree</author>
 	<creationDate>November 2023</creationDate>
-    <version>1.8.5</version>
+    <version>1.8.85</version>
 	<copyright>Copyright (C) 2023 Phil Petree. All rights reserved.</copyright>
-	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
-    <description><![CDATA[This module shows the latest visitors to your website on a Google Map. To do this, it captures the visitors IP address and uses 
-    ip2location.io to retrieve visitors approximate latitude and longitude coordinates and then stores those coordinates a database. 
-    A cookie is then saved marking this as 'done' and so we don't duplicate lookups.<br<br>
-    To implement this you will need two modules.<br><br><strong>Module One:</strong> In this module 'Show Map' is disabled and 'Hide Title' should be set to NO and then assigned to any module position on all the pages where you want to capture the visitors location (home page, landing pages etc).<br><br>
-    <strong>Module Two:</strong>The other module will have 'Show Maps' enabled and this module will be assigned to the page where you want your map displayed. Something like 'geotracker-map'<br><br>
-	You will need a free account at ip2location.io (peferred) or ipapi.com (less secure, fewer lookups) plus you will need your Google Maps key.<br<br>
-	Lastly, you will probably want to keep the menu item showing this map off the public lookups so that random visitors don't run up your maps usage.]]>
-</description>
+	<license>https://github.com/ppetree/geotracker/blob/main/LICENSE GNU/GPL</license>
+    <description>GEOTR_MOD_DESC</description>
 
 	<install> <!-- Runs on install -->
 		<sql>
@@ -38,21 +31,19 @@
 	<config>
 		<fields name="params" >
 			<fieldset name="basic">
-			<field name="showmap" type="radio" default="1" label="Show Map" description="Hiding the map can allow you to keep on recording visitors' location data without showing the map." class="radio btn-group btn-group-yesno">
+			<field name="showmap" type="radio" default="1" label="GEOTR_MOD_SHOWMAP_LAB" description="GEOTR_MOD_SHOWMAP_DESC" class="radio btn-group btn-group-yesno">
 					<option value="0">Hide Map - Capture Data</option>
 					<option value="1">Show Map - Map with Data</option>
 			</field>
-
-			<field name="showtext" type="radio" default="0" label="Show Text" description="This only provides minimal text when the map is shown."  class="radio btn-group btn-group-yesno">
+			<field name="showtext" type="radio" default="0" label="GEOTR_MOD_SHOWTEXT_LAB" description="GEOTR_MOD_SHOWTEXT_DESC"  class="radio btn-group btn-group-yesno">
 					<option value="0">Hide</option>
 					<option value="1">Show</option>
 			</field>
-
-			<field name="width" type="text" default="100%" label="Map Width" description="Supports both % and px units" />
-			<field name="height" type="text" default="400px" label="Map Height" description="Supports both % and px units" />
-			<field name="maplatitude" type="text" default="40" label="Default map Latitude" description="Latitude to center on your sceen" />
-			<field name="maplongitude" type="text" default="10" label="Default map Longitude" description="Longitude to center on your screen" />
-			<field name="zoom" type="list" default="2" label="Default Zoom" description="1 is far, 20 is near. Some views are not available at high values">
+			<field name="width" type="text" default="100%" label="GEOTR_MOD_MAPWIDTH_LAB" description="GEOTR_MOD_MAPWIDTH_DESC" />
+			<field name="height" type="text" default="400px" label="GEOTR_MOD_MAPHEIGHT_LAB" description="GEOTR_MOD_MAPHEIGHT_DESC" />
+			<field name="maplatitude" type="text" default="40" label="GEOTR_MOD_MAPLATITUDE_LAB" description="GEOTR_MOD_MAPLATITUDE_DESC" />
+			<field name="maplongitude" type="text" default="10" label="GEOTR_MOD_MAPLONGITUDE_LAB" description="GEOTR_MOD_MAPLONGITUDE_DESC" />
+			<field name="zoom" type="list" default="2" label="GEOTR_MOD_MAPZOOM_LAB" description="GEOTR_MOD_MAPZOOM_DESC">
 					<option value="0">0</option>
 					<option value="1">1</option>
 					<option value="2">2</option>
@@ -129,39 +120,29 @@
 					<option value="1">enable</option>
 			</field>
 
-			<field name="type" type="list" default="ROADMAP" label="Default map type" description="Select the type of map to draw first (default is Roadmap)" >
+			<field name="type" type="list" default="ROADMAP" label="GEOTR_MOD_MAPTYPE_LAB" description="GEOTR_MOD_MAPTYPE_DESC" >
 				<option value="ROADMAP">Roadmap Map</option>
 				<option value="SATELLITE">Satellite Map</option>
 				<option value="HYBRID">Hybrid Map</option>
 				<option value="TERRAIN">Terrain Map</option>
 			</field>
 
-			<field name="stylez" type="textarea" filter="raw" default="" label="Map Custom styling" description="You can customize the map layout colors. Basicaly you need to paste in this field the JSON code you get on nordmograph.com/extensions" />
-	 		<field name="limit" type="text" default="100" label="Number of Visitors to show on the map" description="Will show the latest visitors" /> 
+			<field name="stylez" type="textarea" filter="raw" default="" label="GEOTR_MOD_STYLEZ_LAB" description="GEOTR_MOD_STYLEZ_DESC" />
+	 		<field name="limit" type="text" default="100" label="GEOTR_MOD_LIMIT_LAB" description="GEOTR_MOD_LIMIT_DESC" /> 
 		</fieldset>
-
-		<fieldset 
-			name="instructions">
-
-    <![CDATA[This module shows the latest visitors to your website on a Google Map. To do this, it captures the visitors IP address and uses 
-    ip2location.io to retrieve visitors approximate latitude and longitude coordinates and then stores those coordinates a database. 
-    A cookie is then saved marking this as 'done' and so we don't duplicate lookups.<br<br>
-    To implement this you will need two modules.<br><br><strong>Module One:</strong> In this module 'Hide Map - Capture Data' should be selected and 'Title' should be set to NO and then assigned to any module position on all the pages where you want to capture the visitors location (home page, landing pages etc).<br><br>
-    <strong>Module Two:</strong>This second module will have 'Show Maps' enabled and this module will be assigned to the page where you want your map displayed. Something like 'geotracker-map'<br><br>
-	You will need a free account at ip2location.io (peferred) or ipapi.com (less secure, fewer lookups) plus you will need your Google Maps key.<br<br>
-	Lastly, you will probably want to keep the menu item showing this map off the public lookups so that random visitors don't run up your maps usage.]]>
+		<fieldset name="instructions" label="GEOTR_MOD_TAB_INSTRUCTIONS">
+			<field name="instructions222" type="note" 
+					description="GEOTR_MOD_INSTRUCTIONS" />
 		</fieldset>
-
-		<fieldset
-			name="advanced">
-			<field name="apikey" type="text" default="" size="80" label="Google Maps Api Key" description="Required GoogleMaps API key. Sign up for a free key." />
-			<field name="ipservice" type="list" required='required' label="IP Service" description="Select the IP 2 Geo service you want to use" >
+		<fieldset name="advanced" label="GEOTR_MOD_TAB_ADVANCED">
+			<field name="apikey" type="text" default="" size="80" label="GEOTR_MOD_GOOGMAPS_LABEL" description="GEOTR_MOD_GOOGMAPS_DESC" />
+			<field name="ipservice" type="list" required='required' label="GEOTR_MOD_IPLOOKUP_SERVICE_LABEL" description="GEOTR_MOD_IPLOOKUP_DESC" >
 				<option value="IPAPI">ipapi.com</option>
 				<option value="IP2LOC">ip2location.io</option>
 			</field>
-			<field name="ipaccess" type="text" default="" size="80" required='required' label="IP Service Access Key" description="Required acess key. Sign up for a free key." />
+			<field name="ipaccess" type="text" default="" size="80" required='required' label="GEOTR_MOD_IPLOOKUP_KEYLAB" description="GEOTR_MOD_IPLOOKUP_KEYDESC" />
 
-			<field name="cookie_timeout" type="text" default="7200" label="Cookie timeout duration" description="A cookie is set on the client's machine so that we know we have already got his Geo Location. This will skip replotting the same area for the duration of the cookie. Specify timeout length in seconds. Minimum accepted value is 3600" />
+			<field name="cookie_timeout" type="text" default="7200" label="GEOTR_MOD_COOKIE_LAB" description="GEOTR_MOD_COOKIE_DESC" />
 				<field
 					name="layout"
 					type="modulelayout"
@@ -206,7 +187,7 @@
 	<!-- UPDATESERVER DEFINITION -->
 	<updateservers>
 		<!-- Note: No spaces or linebreaks allowed between the server tags -->
-		<server type="extension" priority="1" name="GeoTracker Update Site">https://raw.githubusercontent.com/ppetree/geotracker/main/update.xml</server>
+		<server type="module" priority="1" name="GeoTracker Update Site">https://github.com/ppetree/geotracker/blob/b21315b1464faf8ad3c8355f2d4223729dbe83c9/update.xml</server>
 	</updateservers>
 
 </extension>
