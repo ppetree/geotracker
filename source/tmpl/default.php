@@ -7,9 +7,9 @@
  * GeoTracker Module 
 
  * @link http://github.com/ppetree/geotracker.com
- * @copyright Copyright (C) 2023 Phil Petree
+ * @copyright Copyright (C) 2023-2024 Phil Petree
  * @license https://github.com/ppetree/geotracker/blob/main/LICENSE GNU/GPL 
- * @version 1.8.85
+ * @version 1.9.0
  * Shows your visitors on a Google Map
  */
 
@@ -22,6 +22,7 @@ $ipaccess       = $params->get('ipaccess');
 $ipservice      = $params->get('ipservice');
 $showmap		= $params->get('showmap',1);
 $showtext		= $params->get('showtext',1);
+$showlatest     = $params->get('shownewest',1);
 $limit 			= $params->get('limit','100');
 $height 		= $params->get('height','180px');
 $width 			= $params->get('width','100%');
@@ -48,42 +49,64 @@ $maplongitude 	= $params->get('maplongitude','0');
 $cookie_timeout	= $params->get('cookie_timeout',7200); 
 
 $mapmarkers='';
+$coordinates='';
 
-// we're gonna override some user settings that we know don't work
-// kinda dumb since we should just not allow those settings but hey!
-if (intval($cookie_timeout)< 3600)
+// we've switched to days
+// Make sure old installations now default to one day
+if (intval($cookie_timeout) < 1 || $cookie_timeout > 30)
 { 
-	$cookie_timeout = 3600;
-} 
+	// set it to one day
+	$cookie_timeout = 24 * 3600;
+}
+else
+{
+	$cookie_timeout = ($cookie_timeout * 24 * 3600);
+}
 
+// default the lower limit to 10
 if (intval($limit)< 10)
 { 
 	$limit = 10; 
 } 
 
-if (isset($_COOKIE['geotracker']))
+// now we have our parameters set, let's process this user
+
+// do we have a cookie? A valid cookie?
+if (isset($_COOKIE['geotracker']) && $_COOKIE['geotracker'] != 0)
 {
+	// we have a cookie so let's update the visit counter
+    $coordinates = $_COOKIE['geotracker'];
+	// echo("Cookie 'geotracker says: $coordinates<br> ");
+	ModGeoTrackerHelper::updateVisitCount($coordinates);
 	if($showmap && $showtext)
-		echo JText::_('GEOTR_VALIDCOOKIE'); 
+		echo JText::_('GEOTR_VALIDCOOKIE');
 }
 else
 {  
-    setcookie ("geotracker" ,0, time() + $cookie_timeout ,"/");
 	if($showmap && $showtext)
-		echo " ".JText::_('GEOTR_COOKIESET')." "; 
+		echo " ".JText::_('GEOTR_COOKIESET')." ";
 
     $coordinates = ModGeoTrackerHelper::ipGeoLookup($ipservice, $ipaccess);
-	// echo "<p>returned coordinates: $coordinates </p>";
+	echo "<p>returned coordinates: $coordinates </p>";
 
-	// echo "<p>storing coordinates $coordinates</p>";
-    ModGeoTrackerHelper::saveLocation($params, $coordinates); 
+	// see if we're already in the database with this ipaddress.
+	$id = ModGeoTrackerHelper::getRecordID($coordinates);
+	if($id > 0)
+	{
+		// it's already in the table so lets update the record
 
-	// echo "<p>Now prepare for showing the map</p>";
-	$mapcoords= explode(',',$coordinates);
-	if( $mapcoords[0]!='' )
-		$maplatitude =  $mapcoords[0];
-	if( $mapcoords[1]!='' )
-		$maplongitude =  $mapcoords[1];
+		// and renew the cookie
+		setcookie("geotracker", $coordinates, time() + $cookie_timeout, "/");
+	}
+	else
+	{
+		// echo "<p>storing coordinates $coordinates</p>";
+		ModGeoTrackerHelper::saveLocation($params, $coordinates); 
+
+		// set the cookie with the coordinates
+		setcookie("geotracker", $coordinates, time() + $cookie_timeout, "/");
+	}
+
 } 
 
 // now see if we're showing the map
@@ -91,7 +114,17 @@ else
 // we're gonna insert into the document head
 if($showmap)
 {
-    $results = ModGeoTrackerHelper::getMapMarkers($limit); 
+	// echo "<p>Now prepare for showing the map</p>";
+
+	// Use this users coordinates to center the map
+	$mapcoords= explode(',',$coordinates);
+	if( $mapcoords[0]!='' )
+		$maplatitude = $mapcoords[0];
+	if( $mapcoords[1]!='' )
+		$maplongitude = $mapcoords[1];
+	
+	// get the rest of the markers up to $limit
+    $results = ModGeoTrackerHelper::getMapMarkers($limit, $showlatest);
     $i = 0;
 	$mapmarkers = "var userIcon =  new google.maps.MarkerImage('".$juri."/modules/mod_geotracker/img/marker.png' , 
 	 	new google.maps.Size(32,37),new google.maps.Point(0,0),new google.maps.Point(16,37) );"; 
