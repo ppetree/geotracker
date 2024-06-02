@@ -1,7 +1,7 @@
-# geotracker
+# geotracker Version 1.9.0
 **GeoTracker** is a Joomla 4.0+ module that captures the users location and displays it on a google map.
 
-To do this, it captures the visitors IP address and uses either ipapi.com or ip2location.io (preferred) to retrieve visitors approximate latitude and longitude coordinates and then stores those coordinates a database. A cookie is then saved marking this as 'done' and so we don't duplicate lookups.
+To do this, it captures the visitors IP address and uses either ipapi.com or ip2location.io (preferred) to retrieve visitors approximate latitude and longitude coordinates and then stores those coordinates in a database. A cookie is then saved marking this as 'done' and so we don't duplicate lookups.
 
 To implement this you will need two modules:
 
@@ -11,4 +11,10 @@ To implement this you will need two modules:
 
 You will need a free account at ip2location.io (peferred) or ipapi.com (less secure, fewer lookups) plus you will need your Google Maps key. All of that data is entered on the _Advanced_ tab
 
-Lastly, you will probably want to keep the menu item showing this map off the public lookups so that random visitors don't run up your maps usage.
+Lastly, you will probably want to keep the menu item showing this map off the public lookups and out of search engines so that random visitors don't run up your maps usage. 
+
+**New Features in Version 1.9.0**
+In version 1.9.0 I added a counter to the database along with a timestamp. This will now track how many times a visitor has been to your site and when they last visited. Creating a module using this setting will include the most recent visitors (both new and repeat) while disabling this setting will show you the most recent new visitors.
+
+**Road Map**
+I implemented a product road map which you can find above. I details the plans I have for new functionality.
