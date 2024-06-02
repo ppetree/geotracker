@@ -1,4 +1,4 @@
-# geotracker Version 1.9.0
+# geoTracker Version 1.9.0
 **GeoTracker** is a Joomla 4.0+ module that captures the users location and displays it on a google map.
 
 To do this, it captures the visitors IP address and uses either ipapi.com or ip2location.io (preferred) to retrieve visitors approximate latitude and longitude coordinates and then stores those coordinates in a database. A cookie is then saved marking this as 'done' and so we don't duplicate lookups.
