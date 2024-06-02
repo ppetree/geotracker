@@ -4,4 +4,4 @@ Here are the current to-do's:
 2) some field descriptions are tied to joomla core labels that no longer exist and these need updating
 3) google maps javascript makes a deprecated call that needs to be rewritten. (tmpl/default.php)
 4) MAYBE add in some more free geoip services
-5) Determine how to get the update service working without using one of my servers.
+5) Add labels to the pins showing date of visit and how many visits (total site page views)
