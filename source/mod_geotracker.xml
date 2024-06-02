@@ -3,30 +3,43 @@
     <name>GeoTracker - Shows The Latest Visitors On A Google Map</name>
     <author>Phil Petree</author>
 	<creationDate>November 2023</creationDate>
-    <version>1.8.85</version>
-	<copyright>Copyright (C) 2023 Phil Petree. All rights reserved.</copyright>
+    <version>1.9.0</version>
+	<copyright>Copyright (C) 2023-2024 Phil Petree. All rights reserved.</copyright>
 	<license>https://github.com/ppetree/geotracker/blob/main/LICENSE GNU/GPL</license>
     <description>GEOTR_MOD_DESC</description>
 
-	<install> <!-- Runs on install -->
-		<sql>
-			<file driver="mysql" charset="utf8">install.mysql.utf8.sql</file>
-		</sql>
-	</install>
-
 	<languages>
         <language tag="en-GB">en-GB.mod_geotracker.ini</language>
+        <language tag="en-GB">en-GB.mod_geotracker.sys.ini</language>
     </languages>
 
     <files>
+        <folder>tmpl</folder>
+		<folder>sql</folder>
+		<folder>sql/updates/mysql</folder>
+		<folder>img</folder>
 		<filename module="mod_geotracker">mod_geotracker.php</filename>
         <filename>mod_geotracker.xml</filename>       
         <filename>index.php</filename>
-		<file>install.mysql.utf8.sql</file>
+		<file>sql/install.mysql.utf8.sql</file>
         <filename>helper.php</filename>
-        <folder>tmpl</folder>
-		<folder>img</folder>
     </files>
+
+	<install> <!-- Runs on install -->
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+	<uninstall> <!-- Runs on uninstall -->
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+		</sql>
+	</uninstall>
+	<update> 
+    	<schemas>
+	        <schemapath type="mysql">sql/updates/mysql</schemapath>
+    	</schemas> 
+	</update>
 
 	<config>
 		<fields name="params" >
@@ -38,6 +51,10 @@
 			<field name="showtext" type="radio" default="0" label="GEOTR_MOD_SHOWTEXT_LAB" description="GEOTR_MOD_SHOWTEXT_DESC"  class="radio btn-group btn-group-yesno">
 					<option value="0">Hide</option>
 					<option value="1">Show</option>
+			</field>
+			<field name="shownewest" type="radio" default="1" label="GEOTR_MOD_SHOWNEWEST_LAB" description="GEOTR_MOD_SHOWNEWEST_DESC"  class="radio btn-group btn-group-yesno">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
 			</field>
 			<field name="width" type="text" default="100%" label="GEOTR_MOD_MAPWIDTH_LAB" description="GEOTR_MOD_MAPWIDTH_DESC" />
 			<field name="height" type="text" default="400px" label="GEOTR_MOD_MAPHEIGHT_LAB" description="GEOTR_MOD_MAPHEIGHT_DESC" />
@@ -130,10 +147,6 @@
 			<field name="stylez" type="textarea" filter="raw" default="" label="GEOTR_MOD_STYLEZ_LAB" description="GEOTR_MOD_STYLEZ_DESC" />
 	 		<field name="limit" type="text" default="100" label="GEOTR_MOD_LIMIT_LAB" description="GEOTR_MOD_LIMIT_DESC" /> 
 		</fieldset>
-		<fieldset name="instructions" label="GEOTR_MOD_TAB_INSTRUCTIONS">
-			<field name="instructions222" type="note" 
-					description="GEOTR_MOD_INSTRUCTIONS" />
-		</fieldset>
 		<fieldset name="advanced" label="GEOTR_MOD_TAB_ADVANCED">
 			<field name="apikey" type="text" default="" size="80" label="GEOTR_MOD_GOOGMAPS_LABEL" description="GEOTR_MOD_GOOGMAPS_DESC" />
 			<field name="ipservice" type="list" required='required' label="GEOTR_MOD_IPLOOKUP_SERVICE_LABEL" description="GEOTR_MOD_IPLOOKUP_DESC" >
@@ -142,7 +155,40 @@
 			</field>
 			<field name="ipaccess" type="text" default="" size="80" required='required' label="GEOTR_MOD_IPLOOKUP_KEYLAB" description="GEOTR_MOD_IPLOOKUP_KEYDESC" />
 
-			<field name="cookie_timeout" type="text" default="7200" label="GEOTR_MOD_COOKIE_LAB" description="GEOTR_MOD_COOKIE_DESC" />
+			<field name="cookie_timeout" type="list" default="1" label="GEOTR_MOD_COOKIE_LAB" description="GEOTR_MOD_COOKIE_DESC">
+				<option value="1">1 Day</option>
+				<option value="2">2 Days</option>
+				<option value="3">3 Days</option>
+				<option value="4">4 Days</option>
+				<option value="5">5 Days</option>
+				<option value="6">6 Days</option>
+				<option value="7">7 Days</option>
+				<option value="8">8 Days</option>
+				<option value="9">9 Days</option>
+				<option value="10">10 Days</option>
+				<option value="11">11 Days</option>
+				<option value="12">12 Days</option>
+				<option value="13">13 Days</option>
+				<option value="14">14 Days</option>
+				<option value="15">15 Days</option>
+				<option value="16">16 Days</option>
+				<option value="17">17 Days</option>
+				<option value="18">18 Days</option>
+				<option value="19">19 Days</option>
+				<option value="20">20 Days</option>
+				<option value="21">21 Days</option>
+				<option value="22">22 Days</option>
+				<option value="23">23 Days</option>
+				<option value="24">24 Days</option>
+				<option value="25">25 Days</option>
+				<option value="26">26 Days</option>
+				<option value="27">27 Days</option>
+				<option value="28">28 Days</option>
+				<option value="29">29 Days</option>
+				<option value="30">30 Days</option>
+			</field>
+
+
 				<field
 					name="layout"
 					type="modulelayout"
@@ -181,13 +227,17 @@
 						value="itemid"></option>
 				</field>
 			</fieldset>
+			<fieldset name="instructions" label="GEOTR_MOD_TAB_INSTRUCTIONS">
+				<field name="instructions222" type="note" 
+						description="GEOTR_MOD_INSTRUCTIONS" />
+			</fieldset>
 		</fields>
     </config>
 
 	<!-- UPDATESERVER DEFINITION -->
 	<updateservers>
 		<!-- Note: No spaces or linebreaks allowed between the server tags -->
-		<server type="module" priority="1" name="GeoTracker Update Site">https://github.com/ppetree/geotracker/blob/b21315b1464faf8ad3c8355f2d4223729dbe83c9/update.xml</server>
+		<server type="module" priority="1" name="GeoTracker Update Site">https://raw.githubusercontent.com/ppetree/geotracker/main/source/update.xml</server>
 	</updateservers>
 
 </extension>
