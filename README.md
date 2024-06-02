@@ -17,4 +17,4 @@ Lastly, you will probably want to keep the menu item showing this map off the pu
 In version 1.9.0 I added a counter to the database along with a timestamp. This will now track how many times a visitor has been to your site and when they last visited. Creating a module using this setting will include the most recent visitors (both new and repeat) while disabling this setting will show you the most recent new visitors.
 
 **Road Map**
-I implemented a product road map which you can find above. I details the plans I have for new functionality.
+I implemented a product road map which you can find above. I detailed the plans I have for new functionality.
