@@ -8,6 +8,9 @@
 		<downloads>
 			<downloadurl type="full" format="zip">https://github.com/ppetree/geotracker/releases/download/v1.9.0/pkg_mod_geotracker.v1.9.0.zip</downloadurl>
 		</downloads>
+		<tags>
+			<tag>stable</tag>
+		</tags>
 		<maintainer>ppetree</maintainer>
 		<maintainerurl>http://github.com/ppetree/geotracker</maintainerurl>
 		<targetplatform name="joomla" version="4.0"/>
