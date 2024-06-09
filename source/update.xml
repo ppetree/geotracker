@@ -1,6 +1,6 @@
 <updates>
 	<update>
-		<name>GeoTracker - Shows Your Site's Latest Visitors On A Google Map</name>
+		<name>GeoTracker - Shows The Latest Visitors On A Google Map</name>
 		<description>This is GeoTracker Version 1.9.0</description>
 		<element>mod_geotracker</element>
 		<type>module</type>
