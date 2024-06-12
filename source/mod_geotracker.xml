@@ -237,7 +237,7 @@
 	<!-- UPDATESERVER DEFINITION -->
 	<updateservers>
 		<!-- Note: No spaces or linebreaks allowed between the server tags -->
-		<server type="module" priority="1" name="GeoTracker Update Site">https://raw.githubusercontent.com/ppetree/geotracker/main/source/update.xml</server>
+		<server type="extension" priority="1" name="GeoTracker Update Site">https://raw.githubusercontent.com/ppetree/geotracker/main/source/update.xml</server>
 	</updateservers>
 
 </extension>
