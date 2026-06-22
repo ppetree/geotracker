@@ -1,19 +1,9 @@
-<updates>
-	<update>
-		<name>GeoTracker - Shows The Latest Visitors On A Google Map</name>
-		<description>This is GeoTracker Version 1.9.0</description>
-		<element>mod_geotracker</element>
-		<type>module</type>
-		<version>1.9.0</version>
-		<downloads>
-			<downloadurl type="full" format="zip">https://github.com/ppetree/geotracker/releases/download/v1.9.0/pkg_mod_geotracker.v1.9.0.zip</downloadurl>
-		</downloads>
-		<tags>
-			<tag>stable</tag>
-		</tags>
-		<maintainer>ppetree</maintainer>
-		<maintainerurl>http://github.com/ppetree/geotracker</maintainerurl>
-		<targetplatform name="joomla" version="4\.[123456789]"/>
-		<client>site</client>
-	</update>
-</updates>
+<?xml version="1.0" encoding="utf-8"?>
+<extensions>
+    <extension name="GeoTracker" element="mod_geotracker" type="module" version="5.0" client="site">
+        <version>1.9.0</version>
+        <update>
+            <schemapath type="mysql">sql/updates/mysql</schemapath>
+        </update>
+    </extension>
+</extensions>
