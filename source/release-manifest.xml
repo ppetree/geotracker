@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest>
+  <name>GeoTracker</name>
+  <version>1.9.1</version>
+  <description>Compatibility and upgrade scripts added for Joomla 5+</description>
+  <files>
+    <file>source/mod_geotracker.php</file>
+    <file>source/helper.php</file>
+    <file>source/tmpl/default.php</file>
+    <file>source/sql/install.mysql.utf8.sql</file>
+    <file>source/sql/uninstall.mysql.utf8.sql</file>
+    <file>source/sql/updates/mysql/5.0.0-20260622.sql</file>
+  </files>
+</manifest>
