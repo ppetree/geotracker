@@ -3,7 +3,7 @@
     <name>GeoTracker - Shows The Latest Visitors On A Google Map</name>
     <author>Phil Petree</author>
 	<creationDate>November 2023</creationDate>
-    <version>1.9.0</version>
+    <version>1.9.1</version>
 	<copyright>Copyright (C) 2023-2024 Phil Petree. All rights reserved.</copyright>
 	<license>https://github.com/ppetree/geotracker/blob/main/LICENSE GNU/GPL</license>
     <description>GEOTR_MOD_DESC</description>
