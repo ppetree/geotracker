@@ -1,9 +1,8 @@
 <?php
 /**
-
  * Helper class for GeoTracker Visitors Map module
  * GeoTracker Module 
-
+ *
  * @link http://github.com/ppetree/geotracker
  * @copyright Copyright (C) 2023-2024 Phil Petree
  * @license https://github.com/ppetree/geotracker/blob/main/LICENSE GNU/GPL 
@@ -14,159 +13,169 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Log\Log;
+
 class ModGeoTrackerHelper
 {
-	static function ipGeoLookup($ipService, $access_key)
-	{ 
-		$ip = $_SERVER['REMOTE_ADDR'];
-		$url = "";
-		if($ipService == "IPAPI")
-		{	
-		   $url = "http://api.ipapi.com/$ip/?access_key=$access_key";
-		}
-		elseif($ipService == "IP2LOC")
-		{
-			$url = "https://api.ip2location.io/?key=$access_key&ip=$ip&format=json";
-		}
-		else
-		{
-			// no service chosen so do nothing
-			return;
-		}
+    static function ipGeoLookup($ipService, $access_key)
+    {
+        $app = Factory::getApplication();
+        $ip = $app->input->server->getString('REMOTE_ADDR', '');
+        $url = '';
 
-		// make the call, get the data
-		if (function_exists('curl_init'))
-		{
-			$c = curl_init();
-			curl_setopt($c, CURLOPT_URL, $url);
-			curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($c, CURLOPT_CONNECTTIMEOUT, 30);
-			$content = trim(curl_exec($c));
-			curl_close($c);
-		}
-		elseif (ini_get('allow_url_fopen'))
-		{
-			// try it the old fashioned way
-			$timeout = ini_set('default_socket_timeout', 30);
-			$fp = @fopen($url, 'r');
-			$content = @fread($fp, 4096);
-			@fclose($fp);
-		}
-		// decode the response
-		$json = json_decode($content);
+        if ($ipService == 'IPAPI') {
+            $url = "http://api.ipapi.com/$ip/?access_key=$access_key";
+        } elseif ($ipService == 'IP2LOC') {
+            $url = "https://api.ip2location.io/?key=$access_key&ip=$ip&format=json";
+        } else {
+            // no service chosen so do nothing
+            return '';
+        }
 
-		// we're only saving the lat/lon so just snag that
-		$latitude = $json->latitude;
-		$longitude = $json->longitude;
+        $content = '';
 
-		if($latitude && $longitude)
-		{
-			// combine them into a string for storage
-			$result = "$latitude,$longitude";
-			// var_dump("ip2location results: " .$result);
-			return $result; 
-		}
-		else
-		{
-			// use for debugging only
-                        // var_dump("ip2location has no results for " .$ip);
-			return "";
-		}
-	}
+        // make the call, get the data
+        if (function_exists('curl_init')) {
+            $c = curl_init();
+            curl_setopt($c, CURLOPT_URL, $url);
+            curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($c, CURLOPT_CONNECTTIMEOUT, 30);
+            $content = trim(curl_exec($c));
+            curl_close($c);
+        } elseif (ini_get('allow_url_fopen')) {
+            // try it the old fashioned way
+            $timeout = ini_set('default_socket_timeout', 30);
+            $fp = @fopen($url, 'r');
+            if ($fp) {
+                $content = @stream_get_contents($fp);
+                @fclose($fp);
+            }
+        }
 
-	// see if we already have a record for this address
-	static function getRecordID($coordinates)
-	{
-		// echo "<p>getting DBO</p>";
-		$db = JFactory::getDBO();
+        if (empty($content)) {
+            return '';
+        }
 
-		echo "<p>testing to see if it's already in the DB</p>";
-		$q ="SELECT COUNT(id) 
-		FROM #__geotracker_visitors 
-		WHERE geoLocation='".$coordinates."' ";
-		$db->setQuery($q );
-		$isstored = $db->loadResult();
+        // decode the response
+        $json = json_decode($content);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            Log::add('GeoTracker: JSON decode error for IP lookup - ' . json_last_error_msg(), Log::ERROR, 'mod_geotracker');
+            return '';
+        }
 
-		if(!$isstored)
-		{
-			echo "<p>Not in DB</p>";
-			return(0);
-		}
-		return($isstored);	// caller gets the rowid
-	}
+        // validate properties
+        $latitude = isset($json->latitude) ? $json->latitude : (isset($json->lat) ? $json->lat : null);
+        $longitude = isset($json->longitude) ? $json->longitude : (isset($json->lon) ? $json->lon : (isset($json->lng) ? $json->lng : null));
 
-	// this function adds the lat/lon to the database
-	static function saveLocation($params, $coordinates)
-	{
-		$showmap  = $params->get('showmap',1);
-		$showtext = $params->get('showtext',1);
+        if ($latitude === null || $longitude === null) {
+            return '';
+        }
 
-		// echo "<p>getting DBO</p>";
-		$db = JFactory::getDBO();
+        $latitude = trim((string) $latitude);
+        $longitude = trim((string) $longitude);
 
-		if ( strlen($coordinates)<3  ) { return; } 
+        if ($latitude !== '' && $longitude !== '') {
+            // combine them into a string for storage
+            $result = $latitude . ',' . $longitude;
+            return $result;
+        }
 
-		$q = "INSERT INTO #__geotracker_visitors (`num_visits`,`geoLocation`) 
-		VALUES ('1', '$coordinates')"; 
-		// echo "<p>setting query as: $q</p>";
-		$db->setQuery($q); 
+        return '';
+    }
 
-		// echo "<p>Executing query</p>";
-		if (!$db->execute())
-		{ 
-			// echo "<p>DBError: " .$db->getErrorMsg() ."</p>"; 
-			return; 
-		} 
-		if($showmap && $showtext) echo JText::_('GEOTR_YOUADDED');
-	} 
+    // see if we already have a record for this address
+    static function getRecordID($coordinates)
+    {
+        $db = Factory::getDbo();
 
-	// this function updates the number of times a visitor has visited the site
-	// if the cookie is set this will be called. If the cookie has expired, this will be called when we have new info
-	static function updateVisitCount($coordinates)
-	{
-		// cookie is set so we can update num_visits
-		if ( strlen($coordinates) <3  ) { return; }
+        $query = $db->getQuery(true)
+            ->select('COUNT(' . $db->quoteName('id') . ')')
+            ->from($db->quoteName('#__geotracker_visitors'))
+            ->where($db->quoteName('geoLocation') . ' = ' . $db->quote($coordinates));
 
-		$db = JFactory::getDBO();
-		$q = "UPDATE #__geotracker_visitors SET num_visits=num_visits+1
-		WHERE geoLocation='$coordinates'"; 
-		// echo("setting query as: $q");
-		$db->setQuery($q); 
+        $db->setQuery($query);
+        $isstored = (int) $db->loadResult();
 
-		// echo "<p>Executing query</p>";
-		if (!$db->execute())
-		{ 
-			// echo "<p>DBError: " .$db->getErrorMsg() ."</p>"; 
-			return(FALSE);
-		}
-		return(TRUE);
-	}
+        if (!$isstored) {
+            return 0;
+        }
 
-	/* this gets all the latest visitors to be used as lat/lon map markers */
-	/* we should probably add date/time and referrer so we can do map popups */
-	static function getMapMarkers($limit, $showlatest)
-	{
-		if($showlatest == 1)
-		{
-			// get '$limit' number of most recent (new and returning) visitors
-			$db = JFactory::getDBO();
-			$q = "SELECT geoLocation
-			FROM #__geotracker_visitors
-			ORDER BY last_visit DESC LIMIT ".$limit; 
-			$db->setQuery($q); 
-			$results = $db->loadObjectList(); 	
-			return $results;
-		}
-		else
-		{
-			// get '$limit' number of newest unique visitors
-			$db = JFactory::getDBO();
-			$q = "SELECT DISTINCT geoLocation
-			FROM #__geotracker_visitors ORDER BY id DESC LIMIT ".$limit; 
-			$db->setQuery($q); 
-			$results = $db->loadObjectList(); 	
-			return $results;
-		}
-	}
-} 
-?>
+        return $isstored; // caller gets the count
+    }
+
+    // this function adds the lat/lon to the database
+    static function saveLocation($params, $coordinates)
+    {
+        $showmap  = $params->get('showmap', 1);
+        $showtext = $params->get('showtext', 1);
+
+        $db = Factory::getDbo();
+
+        if (strlen($coordinates) < 3) {
+            return false;
+        }
+
+        try {
+            $query = $db->getQuery(true);
+            $columns = [$db->quoteName('num_visits'), $db->quoteName('geoLocation')];
+            $values  = [(int) 1, $db->quote($coordinates)];
+
+            $query->insert($db->quoteName('#__geotracker_visitors'))
+                ->columns($columns)
+                ->values(implode(',', $values));
+
+            $db->setQuery($query);
+            $db->execute();
+
+            // Do not echo from helpers; return true and let caller decide display
+            return true;
+        } catch (\Exception $e) {
+            Log::add('GeoTracker: DB insert error - ' . $e->getMessage(), Log::ERROR, 'mod_geotracker');
+            return false;
+        }
+    }
+
+    // this function updates the number of times a visitor has visited the site
+    static function updateVisitCount($coordinates)
+    {
+        if (strlen($coordinates) < 3) {
+            return false;
+        }
+
+        $db = Factory::getDbo();
+
+        try {
+            $query = $db->getQuery(true);
+            $query->update($db->quoteName('#__geotracker_visitors'))
+                ->set($db->quoteName('num_visits') . ' = ' . $db->quoteName('num_visits') . ' + 1')
+                ->where($db->quoteName('geoLocation') . ' = ' . $db->quote($coordinates));
+
+            $db->setQuery($query);
+            $db->execute();
+            return true;
+        } catch (\Exception $e) {
+            Log::add('GeoTracker: DB update error - ' . $e->getMessage(), Log::ERROR, 'mod_geotracker');
+            return false;
+        }
+    }
+
+    /* this gets all the latest visitors to be used as lat/lon map markers */
+    static function getMapMarkers($limit, $showlatest)
+    {
+        $db = Factory::getDbo();
+        $query = $db->getQuery(true)->select($db->quoteName('geoLocation'))->from($db->quoteName('#__geotracker_visitors'));
+
+        if ($showlatest == 1) {
+            $query->order($db->quoteName('last_visit') . ' DESC');
+        } else {
+            $query->distinct()->order($db->quoteName('id') . ' DESC');
+        }
+
+        $db->setQuery($query, 0, (int) $limit);
+        $results = $db->loadObjectList();
+
+        return $results;
+    }
+}

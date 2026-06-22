@@ -1,8 +1,7 @@
 <?php
 /**
-
  * GeoTracker Module 
-
+ *
  * @link http://github.com/ppetree/geotracker
  * @copyright Copyright (C) 2023-2024 Phil Petree
  * @license https://github.com/ppetree/geotracker/blob/main/LICENSE GNU/GPL 
@@ -11,10 +10,11 @@
  */
 
 // no direct access
-defined( '_JEXEC' ) or die( 'Restricted access' );
- 
-// Include the syndicate functions only once
-require_once( dirname(__FILE__).'/helper.php' );
-require( JModuleHelper::getLayoutPath( 'mod_geotracker' ) );
+defined('_JEXEC') or die('Restricted access');
+
+require_once __DIR__ . '/helper.php';
+
+$layout = \Joomla\CMS\Helper\ModuleHelper::getLayoutPath('mod_geotracker');
+require $layout;
 
 ?>
